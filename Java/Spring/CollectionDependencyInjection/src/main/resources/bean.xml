@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="empService" class="com.practice.service.EmployeeService">
+		<property name="empList">
+			<list>
+				<ref bean="emp1"/>
+				<ref bean="emp2"/>
+				<ref bean="emp3"/>
+			</list>
+		</property>
+		<property name="empSet">
+			<set>
+				<ref bean="emp1"/>
+				<ref bean="emp2"/>
+				<ref bean="emp3"/>
+			</set>
+		</property>
+		<property name="empMap">
+			<map>
+				<entry key="1">
+					<ref bean="emp1"/>
+				</entry>
+				<entry key="2">
+					<ref bean="emp2"/>
+				</entry>
+				<entry key="3">
+					<ref bean="emp3"/>
+				</entry>
+			</map>
+		</property>
+		<property name="empProp">
+			<props>
+				<prop key="1">A</prop>
+				<prop key="2">B</prop>
+				<prop key="3">C</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="emp1" class="com.practice.Employee">
+		<property name="id" value="1" />
+		<property name="name" value="A" />
+	</bean>
+	
+	<bean id="emp2" class="com.practice.Employee">
+		<property name="id" value="2" />
+		<property name="name" value="B" />
+	</bean>
+	
+	<bean id="emp3" class="com.practice.Employee">
+		<property name="id" value="3" />
+		<property name="name" value="C" />
+	</bean>
+
+</beans>
