@@ -15,5 +15,12 @@
 	<bean id="empSet" class="com.practice.Employee">
 		<property name="address" ref="address" />
 	</bean>
+	
+	<!-- Inner bean -->
+	<bean id="empInner" class="com.practice.Employee">
+		<property name="address">
+			<bean class="com.practice.Address"></bean>
+		</property>
+	</bean>
 
 </beans>

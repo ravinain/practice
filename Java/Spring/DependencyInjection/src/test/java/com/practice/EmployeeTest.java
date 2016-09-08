@@ -30,4 +30,10 @@ public class EmployeeTest {
 		assertNotNull(emp.getAddress());
 	}
 
+	@Test
+	public void testEmployeeInnerBean() {
+		Employee emp = appCtxt.getBean("empInner", Employee.class);
+		assertNotNull(emp);
+		assertNotNull(emp.getAddress());
+	}
 }
