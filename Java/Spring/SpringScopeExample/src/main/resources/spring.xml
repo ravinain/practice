@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="hello" class="com.practice.HelloWorld">
+	</bean>
+	
+	<bean id="helloP" class="com.practice.HelloWorld" scope="prototype">
+	</bean>
+	
+	<!-- There are more scope types available but they'll be covered while creating project for Spring MVC -->
+
+</beans>
