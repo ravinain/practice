@@ -56,4 +56,7 @@
 		<property name="name" value="C" />
 	</bean>
 
+    <!-- To insert null value then use <null /> tag -->
+    <!-- To insert empty value then leave element blank -->
+    
 </beans>
