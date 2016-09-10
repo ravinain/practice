@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util
+                    http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<context:annotation-config />
+
+	<!-- Simple Autowire example Start -->
+	<bean id="emp" class="com.practice.Employee">
+		<!-- Comment any property given below and see what you get while running 
+			EmployeeMain class -->
+		<property name="address" ref="address" />
+		<property name="id" value="1" />
+	</bean>
+
+	<bean id="address" class="com.practice.Address" />
+	<!-- Simple Autowire example End -->
+
+	<!-- Autowire with Qualifier Start -->
+	<bean id="gym" class="com.practice.Gym" />
+
+	<bean id="instrument1" class="com.practice.Instrument">
+		<property name="name" value="Trade Mill" />
+		<property name="type" value="Warm-up Excercise Machine" />
+	</bean>
+
+	<bean id="instrument2" class="com.practice.Instrument">
+		<property name="name" value="Dumbells" />
+		<property name="type" value="Upper body workout machine" />
+	</bean>
+	<!-- Autowire with Qualifier End -->
+
+	<!-- Autowire with Resource/Qualifier for collection type Start -->
+	<bean id="course" class="com.practice.Course">
+		<!-- <qualifier value="subjectList1" /> -->
+	</bean>
+
+	<util:list id="subjectList1" value-type="com.practice.Subject" list-class="java.util.ArrayList">
+		<ref bean="subject1"/>
+		<ref bean="subject2"/>
+	</util:list> 
+	
+	<util:list id="subjectList2" value-type="com.practice.Subject" list-class="java.util.ArrayList">
+		<ref bean="subject2"/>
+		<ref bean="subject3"/>
+	</util:list>
+	
+	<bean id="subject1" class="com.practice.Subject">
+		<property name="name" value="Maths" />
+	</bean>
+	
+	<bean id="subject2" class="com.practice.Subject">
+		<property name="name" value="English" />
+	</bean>
+	
+	<bean id="subject3" class="com.practice.Subject">
+		<property name="name" value="Science" />
+	</bean>
+	<!-- Autowire with Resource/Qualifier for collection type End -->
+</beans>
