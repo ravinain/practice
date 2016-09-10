@@ -3,6 +3,9 @@
  */
 package com.practice;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -56,5 +59,15 @@ public class Employee {
 	@Required
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	@PostConstruct
+	public void init() {
+		System.out.println("Init");
+	}
+	
+	@PreDestroy
+	public void destroy() {
+		System.out.println("Destroy");
 	}
 }

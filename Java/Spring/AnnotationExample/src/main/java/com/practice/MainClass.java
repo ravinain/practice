@@ -1,12 +1,12 @@
 package com.practice;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MainClass {
 
 	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 		Employee emp = context.getBean("emp", Employee.class);
 		System.out.println(emp.getId());
 		
@@ -17,6 +17,8 @@ public class MainClass {
 		Course course = context.getBean("course", Course.class);
 		System.out.println(course.getSubjects().get(0).getName());
 		System.out.println(course.getSubjects().get(1).getName());
+		
+		context.registerShutdownHook();
 	}
 
 }
