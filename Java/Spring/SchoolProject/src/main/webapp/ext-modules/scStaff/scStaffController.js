@@ -23,13 +23,12 @@ angular
 												function(res) {
 													$scope.add.successFlag = true;
 													$scope.add.showMessage = true;
-													$scope.add.message ="Staff has been added successfully!";
+													$scope.add.message =[{"message":"Staff has been added successfully!"}];
 												},
 												function(res) {
 													$scope.add.successFlag = false;
 													$scope.add.showMessage = true;
-													$scope.add.message = $scope
-															.getErrorMessages(res.data.messages);
+													$scope.add.message = res.data.messages;
 												});
 							};
 							
@@ -56,23 +55,16 @@ angular
 							$scope.search.staff = {};
 							$scope.search.staff.header = [ "ID", "Name", "Age", "Salary", "Gender", "Roles", "Subjects", "Update", "Delete" ];
 							$scope.search.resultFlag = false;
-							$scope.getErrorMessages = function(messages) {
-								var message = '';
-								angular.forEach(messages, function(value) {
-									message += value.message + ', ';
-								});
-								return message;
-							};
 
 							$scope.searchStaff = function() {
 								if (!$scope.search.staff.name) {
 									$scope.search.staff.name = {};
-									$scope.search.staff.name.name = '';
+									$scope.search.staff.name.id = '';
 								}
 								$scope.search.resultFlag = false;
 								scStaffService
 										.getStaff(
-												$scope.search.staff.name.name)
+												$scope.search.staff.name.id)
 										.then(
 												function(res) {
 													if (res.data instanceof Array) {
@@ -130,12 +122,12 @@ angular
 										function(res) {
 											$scope.update.search.resultFlag = false;
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Staff has updated successfully!";
+											$scope.update.resultMessage = [{"message":"Staff has updated successfully!"}];
 											$scope.update.errorFlag = false;
 											$scope.fillAllStaffsList();
 										}, function(res) {
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Error occured!";
+											$scope.update.resultMessage = res.data.messages;
 											$scope.update.errorFlag = true;
 										});
 							};
@@ -185,12 +177,12 @@ angular
 										function(res) {
 											$scope.delete.search.resultFlag = false;
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Staff has deleted successfully!";
+											$scope.delete.resultMessage = [{"message":"Staff has deleted successfully!"}];
 											$scope.delete.errorFlag = false;
 											$scope.fillAllStaffsList();
 										}, function(res) {
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Error occured!";
+											$scope.delete.resultMessage = res.data.messages;
 											$scope.delete.errorFlag = true;
 										});
 							};

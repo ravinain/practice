@@ -18,10 +18,12 @@ var subjectService = function($http) {
 	};
 	
 	var addSubject = function(subjectObj) {
+		subjectObj = subjectObj?subjectObj:{};
 		return $http.post("subject/add.json", subjectObj);
 	};
 	
 	var updateSubject = function(subjectObj) {
+		subjectObj = subjectObj?subjectObj:{};
 		return $http.put("subject/update/"+subjectObj.id+".json", subjectObj);
 	};
 	

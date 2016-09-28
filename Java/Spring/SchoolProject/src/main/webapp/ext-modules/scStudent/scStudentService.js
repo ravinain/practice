@@ -18,10 +18,12 @@ var studentService = function($http) {
 	};
 	
 	var addStudent = function(studentObj) {
+		studentObj = studentObj?studentObj:{};
 		return $http.post("student/add.json", studentObj);
 	};
 	
 	var updateStudent = function(studentObj) {
+		studentObj = studentObj?studentObj:{};
 		return $http.put("student/update/"+studentObj.id+".json", studentObj);
 	};
 	

@@ -1,13 +1,15 @@
 package org.school.model;
 
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @MappedSuperclass
 public class Person {
 
-	@NotNull
+	@NotEmpty
 	private String name;
+	
 	private int age;
 	private String gender;
 	

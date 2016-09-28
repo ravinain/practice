@@ -1,5 +1,6 @@
 package com.school.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -26,6 +27,37 @@ public class SubjectDAOTest {
 	public void testGetAllSubjects() {
 		List<Subject> subjects = subjectDao.getAllSubjects();
 		System.out.println(subjects);
+		List<Integer> a = new ArrayList<Integer>();
+		a.add(1);
+		
+		Ball b = new Ball();
+		System.out.println(b.getName());
 	}
 	
+}
+
+class Shape {
+	private String name;
+	
+	Shape() {
+		this.name="shape";
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+}
+
+class Ball extends Shape {
+	private String name;
+	
+	Ball() {
+		this.name="ball";
+	}
 }

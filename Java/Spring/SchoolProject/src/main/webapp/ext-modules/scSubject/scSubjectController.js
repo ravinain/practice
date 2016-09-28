@@ -21,13 +21,12 @@ angular
 												function(res) {
 													$scope.add.successFlag = true;
 													$scope.add.showMessage = true;
-													$scope.add.message ="Subject has been added successfully!";
+													$scope.add.message =[{"message":"Subject has been added successfully!"}];
 												},
 												function(res) {
 													$scope.add.successFlag = false;
 													$scope.add.showMessage = true;
-													$scope.add.message = $scope
-															.getErrorMessages(res.data.messages);
+													$scope.add.message = res.data.messages;
 												});
 							};
 
@@ -44,13 +43,6 @@ angular
 							$scope.search.subject = {};
 							$scope.search.subject.header = [ "ID", "Name", "Update", "Delete" ];
 							$scope.search.resultFlag = false;
-							$scope.getErrorMessages = function(messages) {
-								var message = '';
-								angular.forEach(messages, function(value) {
-									message += value.message + ', ';
-								});
-								return message;
-							};
 
 							$scope.searchSubject = function() {
 								if (!$scope.search.subject.description) {
@@ -118,12 +110,12 @@ angular
 										function(res) {
 											$scope.update.search.resultFlag = false;
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Subject has updated successfully!";
+											$scope.update.resultMessage = [{"message":"Subject has updated successfully!"}];
 											$scope.update.errorFlag = false;
 											$scope.fillAllSubjectsList();
 										}, function(res) {
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Error occured!";
+											$scope.update.resultMessage = res.data.messages;
 											$scope.update.errorFlag = true;
 										});
 							};
@@ -173,12 +165,12 @@ angular
 										function(res) {
 											$scope.delete.search.resultFlag = false;
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Subject has deleted successfully!";
+											$scope.delete.resultMessage = [{"message":"Subject has deleted successfully!"}];
 											$scope.delete.errorFlag = false;
 											$scope.fillAllSubjectsList();
 										}, function(res) {
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Error occured!";
+											$scope.delete.resultMessage = res.data.messages;
 											$scope.delete.errorFlag = true;
 										});
 							};

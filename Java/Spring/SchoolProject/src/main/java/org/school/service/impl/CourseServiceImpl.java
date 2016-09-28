@@ -9,6 +9,7 @@ import org.school.response.Message;
 import org.school.response.MessageList;
 import org.school.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +27,9 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	CourseDAO courseDao;
+	
+	@Autowired
+	ApplicationContext context;
 	
 	public List<Course> getAllCourses() {
 		return courseDao.getAllCourse();
@@ -45,11 +49,11 @@ public class CourseServiceImpl implements CourseService {
 
 //	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public MessageList addCourse(Course course, BindingResult result) {
-		MessageList messageList = new MessageList();
-		if(result.hasErrors()) {
+		MessageList messageList = context.getBean(MessageList.class);
+		if(result != null && result.hasErrors()) {
 			List<FieldError> fieldErrors = result.getFieldErrors();
 			for(FieldError fieldError: fieldErrors) {
-				Message message = new Message();
+				Message message = context.getBean(Message.class);
 				message.setField(fieldError.getField());
 				message.setMessage(messageSource.getMessage(fieldError.getCodes()[0], null, "", null));
 				messageList.addMessage(message);
@@ -57,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
 		} else if(!isCourseExists(course.getDescription())) {
 			courseDao.saveCourse(course);
 		} else {
-			Message message = new Message();
+			Message message = context.getBean(Message.class);
 			message.setField("course");
 			message.setMessage("Course already exists!");
 			messageList.addMessage(message);
@@ -67,11 +71,11 @@ public class CourseServiceImpl implements CourseService {
 
 //	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public MessageList updateCourse(int id, Course course, BindingResult result) {
-		MessageList messageList = new MessageList();
+		MessageList messageList = context.getBean(MessageList.class);
 		if(result.hasErrors()) {
 			List<FieldError> fieldErrors = result.getFieldErrors();
 			for(FieldError fieldError: fieldErrors) {
-				Message message = new Message();
+				Message message = context.getBean(Message.class);
 				message.setField(fieldError.getField());
 				message.setMessage(messageSource.getMessage(fieldError.getCodes()[0], null, "", null));
 				messageList.addMessage(message);
@@ -79,7 +83,7 @@ public class CourseServiceImpl implements CourseService {
 		} else if(courseDao.isCourseExists(course.getId())) {
 			courseDao.updateCourse(course);
 		} else {
-			Message message = new Message();
+			Message message = context.getBean(Message.class);
 			message.setField("course");
 			message.setMessage("Course does not exists!");
 			messageList.addMessage(message);

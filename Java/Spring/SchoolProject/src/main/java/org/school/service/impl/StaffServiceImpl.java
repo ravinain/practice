@@ -35,7 +35,7 @@ public class StaffServiceImpl implements StaffService{
 
 	public MessageList addStaff(Staff staff, BindingResult result) {
 		MessageList messageList = new MessageList();
-		if(result.hasErrors()) {
+		if(result != null && result.hasErrors()) {
 			List<FieldError> fieldErrors = result.getFieldErrors();
 			for(FieldError fieldError:fieldErrors) {
 				Message message = new Message();
@@ -75,7 +75,6 @@ public class StaffServiceImpl implements StaffService{
 		return messageList;
 	}
 
-//	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public boolean deleteStaff(int id) {
 		boolean delFlag = false;
 		if(staffDao.isStaffExists(id)) {

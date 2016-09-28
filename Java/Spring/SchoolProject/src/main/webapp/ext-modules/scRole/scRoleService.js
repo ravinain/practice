@@ -18,10 +18,12 @@ var roleService = function($http) {
 	};
 	
 	var addRole = function(roleObj) {
+		roleObj = roleObj?roleObj:{};
 		return $http.post("role/add.json", roleObj);
 	};
 	
 	var updateRole = function(roleObj) {
+		roleObj = roleObj?roleObj:{};
 		return $http.put("role/update/"+roleObj.id+".json", roleObj);
 	};
 	

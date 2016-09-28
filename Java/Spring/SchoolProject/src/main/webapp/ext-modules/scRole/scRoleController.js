@@ -21,13 +21,12 @@ angular
 												function(res) {
 													$scope.add.successFlag = true;
 													$scope.add.showMessage = true;
-													$scope.add.message ="Role has been added successfully!";
+													$scope.add.message =[{"message":"Role has been added successfully!"}];
 												},
 												function(res) {
 													$scope.add.successFlag = false;
 													$scope.add.showMessage = true;
-													$scope.add.message = $scope
-															.getErrorMessages(res.data.messages);
+													$scope.add.message = res.data.messages;
 												});
 							};
 
@@ -44,13 +43,6 @@ angular
 							$scope.search.role = {};
 							$scope.search.role.header = [ "ID", "Name", "Update", "Delete" ];
 							$scope.search.resultFlag = false;
-							$scope.getErrorMessages = function(messages) {
-								var message = '';
-								angular.forEach(messages, function(value) {
-									message += value.message + ', ';
-								});
-								return message;
-							};
 
 							$scope.searchRole = function() {
 								if (!$scope.search.role.name) {
@@ -118,12 +110,12 @@ angular
 										function(res) {
 											$scope.update.search.resultFlag = false;
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Role has updated successfully!";
+											$scope.update.resultMessage = [{"message":"Role has updated successfully!"}];
 											$scope.update.errorFlag = false;
 											$scope.fillAllRolesList();
 										}, function(res) {
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Error occured!";
+											$scope.update.resultMessage = res.data.messages;
 											$scope.update.errorFlag = true;
 										});
 							};
@@ -173,12 +165,12 @@ angular
 										function(res) {
 											$scope.delete.search.resultFlag = false;
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Role has deleted successfully!";
+											$scope.delete.resultMessage = [{"message":"Role has deleted successfully!"}];
 											$scope.delete.errorFlag = false;
 											$scope.fillAllRolesList();
 										}, function(res) {
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Error occured!";
+											$scope.delete.resultMessage = res.data.messages;
 											$scope.delete.errorFlag = true;
 										});
 							};

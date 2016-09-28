@@ -11,29 +11,30 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Staff extends Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
+	@Min(100)
 	private double salary;
 	
 	@OneToMany(mappedBy = "staff", fetch=FetchType.EAGER)
-	@Cascade({ CascadeType.DELETE, CascadeType.SAVE_UPDATE })
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE})
+	@NotEmpty
 	private Set<Role> roles = new HashSet<Role>();
 
 	@ManyToMany(mappedBy = "staffs", fetch=FetchType.EAGER)
-	@Cascade({CascadeType.DELETE, CascadeType.SAVE_UPDATE})
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE})
 	private Set<Subject> subjects = new HashSet<Subject>();
 
 	public int getId() {

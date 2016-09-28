@@ -18,10 +18,12 @@ var courseService = function($http) {
 	};
 	
 	var addCourse = function(courseObj) {
+		courseObj = courseObj?courseObj:{};
 		return $http.post("course/add.json", courseObj);
 	};
 	
 	var updateCourse = function(courseObj) {
+		courseObj = courseObj?courseObj:{};
 		return $http.put("course/update/"+courseObj.id+".json", courseObj);
 	};
 	

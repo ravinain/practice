@@ -9,7 +9,10 @@ import org.school.model.Subject;
 import org.school.response.Message;
 import org.school.response.MessageList;
 import org.school.service.SubjectService;
+import org.school.util.MessageConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,22 +30,40 @@ public class SubjectController {
 	@Autowired
 	SubjectService subjectService;
 	
+	@Autowired
+	private ApplicationContext context;
+	
+	@Autowired
+	MessageSource messageSource;
+	
 	@RequestMapping(value="/subjects", method=RequestMethod.GET)
 	public @ResponseBody ResponseEntity<?> getAllSubjects() {
 		List<Subject> subjects = subjectService.getSubjects();
-		if(!subjects.isEmpty()) {
-			return new ResponseEntity<List<Subject>>(subjects, HttpStatus.OK);
+		if(subjects.isEmpty()) {
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_SUBJECT_FOUND, null, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
+			
 		}
-		return new ResponseEntity<Message>(new Message("subject", "No subject has found!"), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<List<Subject>>(subjects, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/subject/{id:[1-9]{1}[0-9]*}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<?> getSubject(@PathVariable("id") int id) {
 		Subject subject = subjectService.getSubject(id);
-		if(subject != null) {
-			return new ResponseEntity<Subject>(subject, HttpStatus.OK);
+		if(subject == null) {
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_SUBJECT_FOUND_BY_ID, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
+			
 		}
-		return new ResponseEntity<Message>(new Message("subject", "Subject not found for ID : " + id), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Subject>(subject, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/subject/add", method = RequestMethod.POST)
@@ -68,7 +89,12 @@ public class SubjectController {
 	public @ResponseBody ResponseEntity<?> deleteSubject(@PathVariable("id") int id) {
 		boolean delFlag = subjectService.deleteSubject(id);
 		if (!delFlag) {
-			return new ResponseEntity<Message>(new Message("subject", "Subject not found for ID : " + id), HttpStatus.NOT_FOUND);
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_SUBJECT_FOUND_BY_ID, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	} 
@@ -76,7 +102,12 @@ public class SubjectController {
 	@ExceptionHandler(RestException.class)
 	public ResponseEntity<?> handleException(RestException restException) {
 		restException.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", "Error CD : "+restException.getErrorCd()+restException.getErrorMsg()),
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(restException.getErrorMsg());
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList,
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -85,6 +116,11 @@ public class SubjectController {
 		String errorMsg = exception.getMessage() == null ? "Exception occurred, see log for details."
 				: exception.getMessage();
 		exception.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", errorMsg), HttpStatus.INTERNAL_SERVER_ERROR);
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(errorMsg);
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

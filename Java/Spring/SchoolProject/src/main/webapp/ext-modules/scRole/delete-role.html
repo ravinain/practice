@@ -41,7 +41,9 @@
 			</div>
 		</form>
 		<div class="alert" data-ng-class="{'alert-success':!delete.errorFlag, 'alert-danger':delete.errorFlag}" data-ng-show="delete.resultFlag">
-			{{delete.resultMessage}}
+			<ul>
+				<li data-ng-repeat="msg in delete.resultMessage">{{msg.message}}</li>
+			</ul>
 		</div>
 	</div>
 </div>

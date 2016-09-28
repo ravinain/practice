@@ -130,5 +130,5 @@ angular.module("app").config(['$routeProvider', function($routeProvider){
 		$routeProvider.when(route.url, route.config);
 	});
 	
-	$routeProvider.otherwise({template: '<div style="top:150px; left:250px;"><h1>Welcome to ABC Public School</h1></div>'});
+	$routeProvider.otherwise({templateUrl: 'pages/home.html'});
 }]);

@@ -18,10 +18,12 @@ var staffService = function($http) {
 	};
 	
 	var addStaff = function(staffObj) {
+		staffObj = staffObj?staffObj:{};
 		return $http.post("staff/add.json", staffObj);
 	};
 	
 	var updateStaff = function(staffObj) {
+		staffObj = staffObj?staffObj:{};
 		return $http.put("staff/update/"+staffObj.id+".json", staffObj);
 	};
 	

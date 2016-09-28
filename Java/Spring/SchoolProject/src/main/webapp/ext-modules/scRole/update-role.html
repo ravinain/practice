@@ -41,7 +41,9 @@
 			</div>
 		</form>
 		<div class="alert" data-ng-class="{'alert-success':!update.errorFlag, 'alert-danger':update.errorFlag}" data-ng-show="update.resultFlag">
-			{{update.resultMessage}}
+			<ul>
+				<li data-ng-repeat="msg in update.resultMessage">{{msg.message}}</li>
+			</ul>
 		</div>
 	</div>
 </div>

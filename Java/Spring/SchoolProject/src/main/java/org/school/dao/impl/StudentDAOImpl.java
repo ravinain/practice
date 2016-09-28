@@ -33,32 +33,12 @@ public class StudentDAOImpl implements StudentDAO {
 		
 		//Remove student from Subject's student property
 		Set<Subject> subjects = student.getSubjects();
-		boolean isExists = false;
 		for (Subject subject : subjects) {
-			Set<Student> students = subject.getStudents();
-			for (Student s : students) {
-				if (s.getId() == student.getId()) {
-					students.remove(s);
-					isExists = true;
-					break;
-				}
-			}
-			if (isExists) {
-				session.merge(subject);
-			}
+			subject.getStudents().clear();;
 		}
-
-		
 		//Remove student from course's Student property
-		Course course = student.getCourse();
-		Set<Student> cStudents = course.getStudents();
-		for (Student cStudent : cStudents) {
-			if (cStudent.getId() == student.getId()) {
-				cStudents.remove(cStudent);
-				session.merge(course);
-				break;
-			}
-		}
+		student.getCourse().getStudents().clear();
+		session.merge(student);
 		
 		session.delete(student);
 	}

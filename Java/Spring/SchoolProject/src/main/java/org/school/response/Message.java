@@ -1,11 +1,15 @@
 package org.school.response;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
 public class Message {
 	private String field;
 	private String message;
 
 	public Message() {
-		
 	}
 	
 	public Message(String field, String message) {

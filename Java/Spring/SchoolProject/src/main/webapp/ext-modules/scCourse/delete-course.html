@@ -12,16 +12,19 @@
 				</div>
 				<div class="form-group">&nbsp;</div>
 				<div class="form-group">
-					<button type="button" class="btn sc-btn" data-ng-click="delete.searchCourse()">Search</button>
+					<button type="button" class="btn sc-btn"
+						data-ng-click="delete.searchCourse()">Search</button>
 				</div>
 			</form>
 		</div>
 
-		<form class="form-horizontal" data-ng-show="delete.search.resultFlag" name="delCourseForm">
+		<form class="form-horizontal" data-ng-show="delete.search.resultFlag"
+			name="delCourseForm">
 			<div class="form-group">
 				<label for="id" class="col-sm-2 control-label">ID:</label>
 				<div class="col-sm-4">
-					<input type="text" class="form-control" name="id" disabled value="{{delete.course.id}}" />
+					<input type="text" class="form-control" name="id" disabled
+						value="{{delete.course.id}}" />
 				</div>
 			</div>
 			<div class="form-group">
@@ -36,21 +39,27 @@
 				<div class="col-sm-4">
 					<select name="subjects" class="form-control"
 						data-ng-model="delete.course.subjects"
-						data-ng-options="item as item.description for item in subjects track by item.id" multiple="multiple" disabled>
+						data-ng-options="item as item.description for item in subjects track by item.id"
+						multiple="multiple" disabled>
 					</select>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-3 text-right">
-					<button type="button" class="btn sc-btn" data-ng-click="deleteCourse()">Delete</button>
+					<button type="button" class="btn sc-btn"
+						data-ng-click="deleteCourse()">Delete</button>
 				</div>
 				<div class="col-sm-3 text-left">
 					<button type="button" class="btn sc-btn">Reset</button>
 				</div>
 			</div>
 		</form>
-		<div class="alert" data-ng-class="{'alert-success':!delete.errorFlag, 'alert-danger':delete.errorFlag}" data-ng-show="delete.resultFlag">
-			{{delete.resultMessage}}
+		<div class="alert"
+			data-ng-class="{'alert-success':!delete.errorFlag, 'alert-danger':delete.errorFlag}"
+			data-ng-show="delete.resultFlag">
+			<ul>
+				<li data-ng-repeat="msg in delete.resultMessage">{{msg.message}}</li>
+			</ul>
 		</div>
 	</div>
 </div>

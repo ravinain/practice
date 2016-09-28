@@ -56,18 +56,15 @@ public class CourseDAOImpl implements CourseDAO{
 		Session session = sessionFactory.getCurrentSession();
 		Course course = this.getCourse(id);
 		Set<Subject> subjects = course.getSubjects();
-		boolean isExists = false;
+		
 		for(Subject subject:subjects) {
 			Set<Course> courses = subject.getCourses();
 			for(Course c:courses) {
 				if(c.getId() == course.getId()) {
 					courses.remove(c);
-					isExists = true;
+					session.merge(subject);
 					break;
 				}
-			}
-			if(isExists) {
-				session.merge(subject);
 			}
 		}
 		session.delete(course);

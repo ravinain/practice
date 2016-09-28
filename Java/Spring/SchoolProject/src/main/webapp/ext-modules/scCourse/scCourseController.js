@@ -25,13 +25,12 @@ angular
 												function(res) {
 													$scope.add.successFlag = true;
 													$scope.add.showMessage = true;
-													$scope.add.message = "Course has been added successfully!";
+													$scope.add.message = [{"message":"Course has been added successfully!"}];
 												},
 												function(res) {
 													$scope.add.successFlag = false;
 													$scope.add.showMessage = true;
-													$scope.add.message = $scope
-															.getErrorMessages(res.data.messages);
+													$scope.add.message = res.data.messages;
 												});
 							};
 
@@ -53,13 +52,6 @@ angular
 							$scope.search.course.header = [ "ID", "Name",
 									"Subjects", "Update", "Delete" ];
 							$scope.search.resultFlag = false;
-							$scope.getErrorMessages = function(messages) {
-								var message = '';
-								angular.forEach(messages, function(value) {
-									message += value.message + ', ';
-								});
-								return message;
-							};
 
 							$scope.searchCourse = function() {
 								if (!$scope.search.course.description) {
@@ -127,12 +119,12 @@ angular
 										function(res) {
 											$scope.update.search.resultFlag = false;
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Course has updated successfully!";
+											$scope.update.resultMessage = [{"message":"Course has updated successfully!"}];
 											$scope.update.errorFlag = false;
 											$scope.fillAllCoursesList();
 										}, function(res) {
 											$scope.update.resultFlag = true;
-											$scope.update.resultMessage = "Error occured!";
+											$scope.update.resultMessage = res.data.messages;
 											$scope.update.errorFlag = true;
 										});
 							};
@@ -182,12 +174,12 @@ angular
 										function(res) {
 											$scope.delete.search.resultFlag = false;
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Course has deleted successfully!";
+											$scope.delete.resultMessage = [{"message":"Course has deleted successfully!"}];
 											$scope.delete.errorFlag = false;
 											$scope.fillAllCoursesList();
 										}, function(res) {
 											$scope.delete.resultFlag = true;
-											$scope.delete.resultMessage = "Error occured!";
+											$scope.delete.resultMessage = res.data.messages;
 											$scope.delete.errorFlag = true;
 										});
 							};

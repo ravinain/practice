@@ -10,7 +10,10 @@ import org.school.model.Subject;
 import org.school.response.Message;
 import org.school.response.MessageList;
 import org.school.service.CourseService;
+import org.school.util.MessageConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,12 +30,23 @@ public class CourseController {
 
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private ApplicationContext context;
+	
+	@Autowired
+	MessageSource messageSource;
 
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<?> getAllCourses() {
 		List<Course> courses = courseService.getAllCourses();
 		if (courses.isEmpty()) {
-			return new ResponseEntity<Message>(new Message("error", "No course found!"), HttpStatus.NOT_FOUND);
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_COURSE_FOUND, null, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Course>>(courses, HttpStatus.OK);
 	}
@@ -41,7 +55,12 @@ public class CourseController {
 	public @ResponseBody ResponseEntity<?> getCourse(@PathVariable("id") int id) {
 		Course course = courseService.getCourse(id);
 		if (course == null) {
-			return new ResponseEntity<Message>(new Message("error", "Course not found for ID : " + id),
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_COURSE_FOUND_BY_ID, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList,
 					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Course>(course, HttpStatus.OK);
@@ -51,7 +70,12 @@ public class CourseController {
 	public @ResponseBody ResponseEntity<?> getCourse(@PathVariable("description") String description) {
 		Course course = courseService.getCourse(description);
 		if (course == null) {
-			return new ResponseEntity<Message>(new Message("error", "Course not found for Name : " + description),
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_COURSE_FOUND_BY_NAME, new String[]{description}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList,
 					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Course>(course, HttpStatus.OK);
@@ -61,7 +85,12 @@ public class CourseController {
 	public @ResponseBody ResponseEntity<?> getCourseSubjects(@PathVariable("id") int id) {
 		List<Subject> subjects = courseService.getCourseSubjects(id);
 		if (subjects.isEmpty()) {
-			return new ResponseEntity<Message>(new Message("error", "No subject found for course ID : " + id),
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_SUBJECT_FOUND_COURSE, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList,
 					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Subject>>(subjects, HttpStatus.OK);
@@ -98,7 +127,12 @@ public class CourseController {
 	@ExceptionHandler(RestException.class)
 	public ResponseEntity<?> handleException(RestException restException) {
 		restException.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", "Error CD : "+restException.getErrorCd()+restException.getErrorMsg()),
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(restException.getErrorMsg());
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList,
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -107,6 +141,11 @@ public class CourseController {
 		String errorMsg = exception.getMessage() == null ? "Exception occurred, see log for details."
 				: exception.getMessage();
 		exception.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", errorMsg), HttpStatus.INTERNAL_SERVER_ERROR);
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(errorMsg);
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

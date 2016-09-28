@@ -22,7 +22,9 @@
 			</div>
 			<br />
 			<div class="alert" data-ng-show="add.showMessage" data-ng-class="{'alert-success':add.successFlag, 'alert-danger':!add.successFlag}">
-				{{add.message}}
+				<ul>
+					<li data-ng-repeat="msg in add.message">{{msg.message}}</li>
+				</ul>
 			</div>
 		</form>
 	</div>

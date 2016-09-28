@@ -9,7 +9,10 @@ import org.school.model.Student;
 import org.school.response.Message;
 import org.school.response.MessageList;
 import org.school.service.StudentService;
+import org.school.util.MessageConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,11 +30,22 @@ public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
+	@Autowired
+	private ApplicationContext context;
+	
+	@Autowired
+	MessageSource messageSource;
+	
 	@RequestMapping(value="/students", method=RequestMethod.GET)
 	public @ResponseBody ResponseEntity<?> getStudents() {
 		List<Student> students = studentService.getStudents();
 		if(students.isEmpty()) {
-			return new ResponseEntity<Message>(new Message("student", "No student found!"), HttpStatus.NOT_FOUND);
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_STUDENT_FOUND, null, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Student>>(students, HttpStatus.OK);
 	}
@@ -40,7 +54,12 @@ public class StudentController {
 	public @ResponseBody ResponseEntity<?> getStudent(@PathVariable("id") int id) {
 		Student student = studentService.getStudent(id);
 		if(student == null) {
-			return new ResponseEntity<Message>(new Message("student", "Student not found for ID : "+id), HttpStatus.NOT_FOUND);
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_STUDENT_FOUND_BY_ID, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Student>(student, HttpStatus.OK);
 	}
@@ -49,7 +68,6 @@ public class StudentController {
 	public @ResponseBody ResponseEntity<?> addStudent(@RequestBody @Valid Student student, BindingResult result) {
 		MessageList messageList = studentService.addStudent(student, result);
 		if(messageList.getMessages().isEmpty()) {
-			System.out.println("Student name : "+student.getName());
 			return new ResponseEntity<Student>(student, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<MessageList>(messageList, HttpStatus.BAD_REQUEST);
@@ -66,16 +84,26 @@ public class StudentController {
 	
 	@RequestMapping(value="/student/delete/{id:[1-9]{1}[0-9]*}", method=RequestMethod.DELETE)
 	public @ResponseBody ResponseEntity<?> deleteStudent(@PathVariable("id") int id) {
-		if(studentService.deleteStudent(id)) {
-			return new ResponseEntity<Integer>(id, HttpStatus.OK);
+		if(!studentService.deleteStudent(id)) {
+			MessageList messageList = context.getBean(MessageList.class);
+			Message msg = context.getBean(Message.class);
+			msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+			msg.setMessage(messageSource.getMessage(MessageConstant.NO_ROLE_FOUND_BY_ID, new String[]{String.valueOf(id)}, null));
+			messageList.addMessage(msg);
+			return new ResponseEntity<MessageList>(messageList, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Integer>(id, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Integer>(id, HttpStatus.OK);
 	}
 	
 	@ExceptionHandler(RestException.class)
 	public ResponseEntity<?> handleException(RestException restException) {
 		restException.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", "Error CD : "+restException.getErrorCd()+restException.getErrorMsg()),
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(restException.getErrorMsg());
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList,
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -84,6 +112,11 @@ public class StudentController {
 		String errorMsg = exception.getMessage() == null ? "Exception occurred, see log for details."
 				: exception.getMessage();
 		exception.printStackTrace();
-		return new ResponseEntity<Message>(new Message("error", errorMsg), HttpStatus.INTERNAL_SERVER_ERROR);
+		MessageList messageList = context.getBean(MessageList.class);
+		Message msg = context.getBean(Message.class);
+		msg.setField(messageSource.getMessage(MessageConstant.ERROR, null, null));
+		msg.setMessage(errorMsg);
+		messageList.addMessage(msg);
+		return new ResponseEntity<MessageList>(messageList, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

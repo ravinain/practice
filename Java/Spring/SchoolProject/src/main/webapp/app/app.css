@@ -45,10 +45,19 @@ body {
 	pointer-events: all !important;
 }
 
-.sc-pointer{
+.sc-pointer {
 	cursor: pointer;
 }
 
 .sc-pointer:hover {
-	color: rgb(0,210, 0);
+	color: rgb(0, 210, 0);
+}
+
+.home .school {
+	max-height: 510px;
+}
+
+.home {
+	top:250px;
+	left: 150px;
 }
