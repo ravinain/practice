@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: dev
+
+---
+
+spring:
+  profiles: dev
+config:
+  ip-address: 192.168.0.1
+  port: 8080
+
+---
+
+spring:
+  profiles: stage
+config:
+  ip-address: 192.168.0.2
+  port: 8090
+  
+---
+
+spring:
+  profiles: prod
+config:
+  ip-address: 192.168.0.3
+  port: 9090  

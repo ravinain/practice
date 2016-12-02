@@ -1,0 +1,18 @@
+=============================
+  _____   ____
+ |    |  /    \  |    |    |
+ |    |  |    |  |    |    |
+ | __/   |____|  |    |    |
+ |   \   |    |  |    |    |
+ |    \  |    |   \__/     |
+=============================
+
+Application Version: ${application.version}
+Formatted Version: ${application.formatted-version}
+Spring Boot Version: ${spring-boot.version}
+Boot Formatted Version: ${spring-boot.formatted-version}
+Ansi Name: ${Ansi.NAME}
+Ansi Color: ${AnsiColor.NAME}
+Ansi Background Nane: ${AnsiBackground.NAME}
+AnsiStyle Name: ${AnsiStyle.NAME}
+Application Title: ${application.title}
